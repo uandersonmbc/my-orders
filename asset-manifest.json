@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/my-order/static/css/main.bfaebab4.chunk.css",
+    "main.js": "/my-order/static/js/main.098f1915.chunk.js",
+    "main.js.map": "/my-order/static/js/main.098f1915.chunk.js.map",
+    "runtime-main.js": "/my-order/static/js/runtime-main.805f932d.js",
+    "runtime-main.js.map": "/my-order/static/js/runtime-main.805f932d.js.map",
+    "static/css/2.c3c86fe6.chunk.css": "/my-order/static/css/2.c3c86fe6.chunk.css",
+    "static/js/2.f1109ff1.chunk.js": "/my-order/static/js/2.f1109ff1.chunk.js",
+    "static/js/2.f1109ff1.chunk.js.map": "/my-order/static/js/2.f1109ff1.chunk.js.map",
+    "index.html": "/my-order/index.html",
+    "precache-manifest.0620234f22d76f61e902d6d434f0dc5b.js": "/my-order/precache-manifest.0620234f22d76f61e902d6d434f0dc5b.js",
+    "service-worker.js": "/my-order/service-worker.js",
+    "static/css/2.c3c86fe6.chunk.css.map": "/my-order/static/css/2.c3c86fe6.chunk.css.map",
+    "static/css/main.bfaebab4.chunk.css.map": "/my-order/static/css/main.bfaebab4.chunk.css.map",
+    "static/media/myorder.jpg": "/my-order/static/media/myorder.ebae42be.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.805f932d.js",
+    "static/css/2.c3c86fe6.chunk.css",
+    "static/js/2.f1109ff1.chunk.js",
+    "static/css/main.bfaebab4.chunk.css",
+    "static/js/main.098f1915.chunk.js"
+  ]
+}
