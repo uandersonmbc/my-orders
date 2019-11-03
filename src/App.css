@@ -1,0 +1,10 @@
+/* https://css-tricks.com/custom-scrollbars-in-webkit/ */
+
+.scroll-none {
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.scroll-none::-webkit-scrollbar {
+    width: 0px;
+}
