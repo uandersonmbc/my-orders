@@ -54,7 +54,7 @@ export default function Dashboard() {
                         icon={'shopping-cart'}
                         title={'Pedidos'}
                         value={5}
-                        styleCard={2}
+                        styleCard={1}
                     />
                 </Col>
                 <Col xs={24} lg={6}>
@@ -62,7 +62,7 @@ export default function Dashboard() {
                         icon={'check'}
                         title={'Concluídos'}
                         value={47}
-                        styleCard={1}
+                        styleCard={2}
                     />
                 </Col>
                 <Col xs={24} lg={6}>
