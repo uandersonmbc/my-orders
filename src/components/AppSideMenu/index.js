@@ -4,8 +4,8 @@ import { HashRouter, Link } from 'react-router-dom';
 
 import { Layout, Menu, Icon } from 'antd';
 
-// import logo from './../../assets/myorder.png';
 import logo from './../../assets/myorder.jpg';
+
 const { Sider } = Layout;
 
 const AppSideMenu = ({ itens }) => (
@@ -19,7 +19,7 @@ const AppSideMenu = ({ itens }) => (
         className="scroll-none"
     >
         <div className="logo">
-            <img width="100%" src={logo} />
+            <img width="100%" src={logo} alt="My Order" />
         </div>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['0']}>
             {itens.map((item, index) => (

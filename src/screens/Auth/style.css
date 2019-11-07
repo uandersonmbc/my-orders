@@ -1,0 +1,85 @@
+.total {
+    background: #5E274F;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    border-radius: 20px;
+    width: 500px;
+    min-height: 400px;
+}
+
+.divImg {
+    height: 150px;
+    margin-top: -40px;
+    display: flex;
+    justify-content: center;
+}
+
+.img {
+    height: 100%;
+}
+
+.divInputs {
+    width: 100%;
+    display: grid;
+    justify-content: center;
+}
+
+.input {
+    width: 350px;
+    height: 40px;
+    margin-bottom: 15px;
+    border: 2px solid rgb(109, 60, 97);
+    border-radius: 5px;
+    padding: 0 11px;
+    font-size: 10pt;
+    overflow: hidden;
+    color: #5E274F;
+}
+
+.input:focus {
+    border-color: rgb(57, 144, 226);
+    outline: none;
+}
+
+.divButtons {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.btn {
+    margin: 5px;
+    width: 168.56px;
+    height: 40px;
+    border-radius: 5px;
+    border: none;
+}
+
+.btn:focus {
+    border: 2px solid rgb(57, 144, 226);
+    outline: none;
+}
+
+.btn-primary {
+    background: #5E274F;
+}
+
+.btn-google {
+    background: #E84234;
+}
+
+.divLinks {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.links {
+    margin: 5px;
+    color: #5E274F;
+}

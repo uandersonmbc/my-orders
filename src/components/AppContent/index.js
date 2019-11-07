@@ -6,7 +6,7 @@ import privateRoutes from './../../routes/privateRoutes';
 
 import { Layout } from 'antd';
 
-const { Content, Footer } = Layout;
+const { Content } = Layout;
 
 const AppContent = () => (
     <Layout style={{ marginLeft: 200, minHeight: '100vh' }}>

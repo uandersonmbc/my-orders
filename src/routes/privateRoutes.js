@@ -13,12 +13,6 @@ export default [
     exact: true,
     component: Employees
   },
-  // {
-  //   path: '/checklists',
-  //   exact: true,
-  //   component: Checklists,
-  //   sidebar: () => <div>Checklists</div>,
-  // },
   {
     path: '*',
     component: NotFound,
