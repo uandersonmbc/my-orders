@@ -4,12 +4,12 @@ import NotFound from './../screens/NotFound';
 
 export default [
   {
-    path: '/',
+    path: '/app',
     exact: true,
     component: Dashboard
   },
   {
-    path: '/employees',
+    path: '/app/employees',
     exact: true,
     component: Employees
   },

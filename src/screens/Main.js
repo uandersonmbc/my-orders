@@ -6,11 +6,11 @@ import AppSideMenu from './../components/AppSideMenu';
 
 import teste from './../configs/menu';
 
-export default function Main() {
+export default function Main(props) {
 
   return (
     <Layout>
-      <AppSideMenu itens={teste.itens} />
+      <AppSideMenu itens={teste.itens} prop={props} />
       <AppContent />
     </Layout>
   );

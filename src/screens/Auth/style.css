@@ -6,7 +6,7 @@
     align-items: center;
 }
 
-.card {
+.cardLogin {
     border-radius: 20px;
     width: 500px;
     min-height: 400px;
@@ -21,6 +21,12 @@
 
 .img {
     height: 100%;
+}
+
+.loginAlert {
+    width: 350px;
+    /* display: flex; */
+    justify-content: center;
 }
 
 .divInputs {
