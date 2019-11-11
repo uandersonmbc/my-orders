@@ -1,5 +1,5 @@
 import Dashboard from '../screens/contents/Dashboard';
-import Employees from '../screens/contents/Employees';
+import Product from '../screens/contents/Product';
 import NotFound from './../screens/NotFound';
 
 export default [
@@ -9,9 +9,9 @@ export default [
     component: Dashboard
   },
   {
-    path: '/app/employees',
+    path: '/app/produtos',
     exact: true,
-    component: Employees
+    component: Product
   },
   {
     path: '*',

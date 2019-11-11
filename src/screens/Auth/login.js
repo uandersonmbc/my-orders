@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Layout, Card, Alert } from 'antd';
 
@@ -24,8 +24,9 @@ export default function Login({ props }) {
         }
 
         try {
-            const response = await Api.post('/login', obj);
-            login(response.data.data.token);
+            /* const response = await Api.post('/login', obj); */
+            // login(response.data.data.token);
+            login('apenas-testando');
             this.props.history.push('/app');
         } catch (error) {
             setSingin(true);
@@ -51,7 +52,7 @@ export default function Login({ props }) {
             <Card className='cardLogin'>
                 <form onSubmit={onSubmitLogin}>
                     <div className='divImg'>
-                        <img src={logo} className='img' />
+                        <img src={logo} className='img' alt="My Order" />
                     </div>
                     {singin ? (<Message />) : ''}
                     <br />
@@ -68,7 +69,7 @@ export default function Login({ props }) {
                     {/*  */}
                     <div className='divLinks'>
                         <a href='#/register' className='links'>Esqueceu a senha ?</a>
-                        <a href='#' className='links'>Não é cadastrado?</a>
+                        <a href='#/' className='links'>Não é cadastrado?</a>
                     </div>
                 </form>
             </Card>
