@@ -44,7 +44,7 @@ export default function Login({ props }) {
         />
     );
 
-    const Verify = () => (isAuthenticated() ? (<Redirect to='/app' />) : '');
+    const Verify = () => (isAuthenticated() ? (<Redirect to='/administrator' />) : '');
 
     return (
         <Layout className='total'>
