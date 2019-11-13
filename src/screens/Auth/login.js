@@ -14,7 +14,10 @@ import './style.css';
 
 export default function Login({ props }) {
 
-    const [singin, setSingin] = useState(false);
+    const [singin, setSingin] = useState({
+        visible: false,
+        message: ''
+    });
 
     const onSubmitLogin = async (e) => {
         e.preventDefault();
@@ -24,23 +27,24 @@ export default function Login({ props }) {
         }
 
         try {
-            /* const response = await Api.post('/login', obj); */
-            // login(response.data.data.token);
-            login('apenas-testando');
-            this.props.history.push('/app');
+            const response = await Api.post('/login', obj);
+            login(response.data.token);
+            props.history.push('/app');
         } catch (error) {
-            setSingin(true);
-            console.log(error);
+            setSingin({
+                visible: true,
+                message: (error.response == undefined) ? '' : error.response.data.message
+            });
         }
     }
 
     const Message = () => (
         <Alert
-            message="E-mail ou senha inválidos"
+            message={singin.message}
             closable
             type="error"
             showIcon
-            onClose={() => setSingin(false)}
+            onClose={() => setSingin({ visible: false, message: '' })}
         />
     );
 
@@ -54,12 +58,12 @@ export default function Login({ props }) {
                     <div className='divImg'>
                         <img src={logo} className='img' alt="My Order" />
                     </div>
-                    {singin ? (<Message />) : ''}
+                    {singin.visible ? (<Message />) : ''}
                     <br />
                     {/*  */}
                     <div className='divInputs'>
-                        <input name='email' type='text' placeholder='E-mail/Usuário' className='input' />
-                        <input name='password' type='password' placeholder='Senha' className='input' />
+                        <input required name='email' type='text' placeholder='E-mail/Usuário' className='input' />
+                        <input required name='password' type='password' placeholder='Senha' className='input' />
                     </div>
                     {/*  */}
                     <div className='divButtons'>
