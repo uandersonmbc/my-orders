@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Modal, Button } from 'antd';
 
-class App extends React.Component {
+class Order extends React.Component {
     state = {
         visible: false,
         confirmLoading: false
@@ -50,4 +50,4 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default Order;

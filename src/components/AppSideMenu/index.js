@@ -8,6 +8,8 @@ import { logout } from './../../services/auth';
 
 import logo from './../../assets/myorder.jpg';
 
+import { getRole } from './../../services/auth';
+
 const { Sider } = Layout;
 
 const AppSideMenu = ({ itens, active }) => {
@@ -31,16 +33,17 @@ const AppSideMenu = ({ itens, active }) => {
                 <img width="100%" src={logo} alt="My Order" />
             </div>
             <Menu theme="dark" mode="inline" defaultSelectedKeys={[active]}>
-                {itens.map((item, index) => (
-                    <Menu.Item key={item.url}>
-                        <Switch basename='/'>
-                            <Link to={item.url}>
-                                <Icon type={item.icon} />
-                                <span className="nav-text">{item.name}</span>
-                            </Link>
-                        </Switch>
-                    </Menu.Item>
-                ))}
+                {itens.map((item) => (
+                    (item.can.indexOf(getRole()) > -1) ?
+                        <Menu.Item key={item.url}>
+                            <Switch basename='/'>
+                                <Link to={item.url}>
+                                    <Icon type={item.icon} />
+                                    <span className="nav-text">{item.name}</span>
+                                </Link>
+                            </Switch>
+                        </Menu.Item>
+                        : ''))}
                 <Menu.Item key='/logout'>
                     <Link to='#' onClick={deslogar}>
                         <Icon type='logout' />

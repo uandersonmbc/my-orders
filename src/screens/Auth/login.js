@@ -8,7 +8,7 @@ import Api from './../../services/api';
 
 import { Redirect } from 'react-router-dom';
 
-import { login, isAuthenticated } from './../../services/auth';
+import { login, isAuthenticated, roleUser, userName } from './../../services/auth';
 
 import './style.css';
 
@@ -29,6 +29,9 @@ export default function Login({ props }) {
         try {
             const response = await Api.post('/login', obj);
             login(response.data.token);
+            const user = await Api.get('/user');
+            roleUser(user.data.role[0])
+            userName(user.data.user.name)
             props.history.push('/app');
         } catch (error) {
             setSingin({
@@ -48,11 +51,11 @@ export default function Login({ props }) {
         />
     );
 
-    const Verify = () => (isAuthenticated() ? (<Redirect to='/administrator' />) : '');
+    const Verify = () => (isAuthenticated() ? (<Redirect to='/dashboard' />) : '');
 
     return (
         <Layout className='total'>
-            <Verify />
+            {/* <Verify /> */}
             <Card className='cardLogin'>
                 <form onSubmit={onSubmitLogin}>
                     <div className='divImg'>
@@ -72,8 +75,8 @@ export default function Login({ props }) {
                     </div>
                     {/*  */}
                     <div className='divLinks'>
-                        <a href='#/register' className='links'>Esqueceu a senha ?</a>
-                        <a href='#/' className='links'>Não é cadastrado?</a>
+                        <a href='/password/reset' className='links'>Esqueceu a senha ?</a>
+                        <a href='/register' className='links'>Não é cadastrado?</a>
                     </div>
                 </form>
             </Card>

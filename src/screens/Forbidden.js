@@ -1,13 +1,16 @@
 import React from 'react';
 
+import { Redirect } from 'react-router-dom';
+
+import { isAuthenticated } from './../services/auth';
+
 function Forbidden(props) {
-  const Verify = () => (isAuthenticated() ? (<Redirect to='/administrator' />) : '');
+  const Verify = () => (isAuthenticated() ? (<Redirect to='/dashboard' />) : (<Redirect to='/login' />));
   return (
-    <>
-      <main>
-        <h1>Página não encontrada</h1>
-      </main>
-    </>
+    <main>
+      <Verify />
+      <h1>Você não tem autorização para acessar essa página</h1>
+    </main>
   );
 }
 
