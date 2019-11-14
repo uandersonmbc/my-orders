@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { HashRouter, Link } from 'react-router-dom';
+import { Switch, Link } from 'react-router-dom';
 
 import { Layout, Menu, Icon } from 'antd';
 
@@ -10,7 +10,7 @@ import logo from './../../assets/myorder.jpg';
 
 const { Sider } = Layout;
 
-const AppSideMenu = ({ itens, prop }) => {
+const AppSideMenu = ({ itens, active }) => {
 
     const deslogar = () => {
         logout();
@@ -30,15 +30,15 @@ const AppSideMenu = ({ itens, prop }) => {
             <div className="logo">
                 <img width="100%" src={logo} alt="My Order" />
             </div>
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={[prop.location.pathname]}>
+            <Menu theme="dark" mode="inline" defaultSelectedKeys={[active]}>
                 {itens.map((item, index) => (
                     <Menu.Item key={item.url}>
-                        <HashRouter basename='/'>
+                        <Switch basename='/'>
                             <Link to={item.url}>
                                 <Icon type={item.icon} />
                                 <span className="nav-text">{item.name}</span>
                             </Link>
-                        </HashRouter>
+                        </Switch>
                     </Menu.Item>
                 ))}
                 <Menu.Item key='/logout'>

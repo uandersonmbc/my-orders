@@ -1,11 +1,8 @@
 export default {
     itens: [
         // Adminstrador
-        { can: 'administrator', name: 'Dashboard', icon: 'dashboard', url: '/administrator' },
-        { can: 'administrator', name: 'Produtos', icon: 'appstore', url: '/administrator/produtos' },
-        { can: 'administrator', name: 'Relatórios', icon: 'fund', url: '/administrator/relatorios' },
-        // Gerente
-        // Garçom
-        // Cliente
+        { can: ['administrator', 'manager'], name: 'Dashboard', icon: 'dashboard', url: '/dashboard' },
+        { can: ['administrator', 'manager'], name: 'Produtos', icon: 'appstore', url: '/produtos' },
+        { can: ['administrator', 'manager'], name: 'Relatórios', icon: 'fund', url: '/relatorios' },
     ]
 }

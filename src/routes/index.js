@@ -1,35 +1,24 @@
 import React from 'react';
-import {
-    BrowserRouter, Route, HashRouter, Redirect,
-} from 'react-router-dom';
+import { BrowserRouter, Switch } from 'react-router-dom';
+import AclRouter from 'react-acl-router';
 import { isAuthenticated } from './../services/auth';
 import Main from './../screens/Main';
-import { Login } from '../screens/Auth';
+import Blank from './../screens/Blank';
 
-import privateRoutes from './privateRoutes';
-
-const PrivateRoute = ({ component: Component, ...rest }) => (
-    <Route
-        {...rest}
-        render={props => (isAuthenticated() ? (
-            <Component {...props} role={rest.role} />
-        ) : (
-                <Redirect to={{ pathname: '/', state: { from: props.location } }} />
-            ))
-        }
-    />
-);
+import { authorizedRoutes, normalRoutes } from './routes';
 
 const Routes = () => (
     <BrowserRouter>
-        <HashRouter basename="/">
-            <Route exact path="/" component={Login} />
-            <Route exact path="/singup" component={Login} />
-            <PrivateRoute path="/administrator" component={Main} role={privateRoutes.administrator} />
-            <PrivateRoute path="/manager" component={Main} role={privateRoutes.manager} />
-            <PrivateRoute path="/waiter" component={Main} role={privateRoutes.waiter} />
-            <PrivateRoute path="/customer" component={Main} role={privateRoutes.customer} />
-        </HashRouter>
+        <Switch>
+            <AclRouter
+                authorities='admin'
+                authorizedRoutes={authorizedRoutes}
+                authorizedLayout={Main}
+                normalRoutes={normalRoutes}
+                normalLayout={Blank}
+                notFound={() => <div>Page Not Found</div>}
+            />
+        </Switch>
     </BrowserRouter>
 );
 
