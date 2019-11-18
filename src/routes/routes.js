@@ -4,6 +4,7 @@ import Dashboard from '../screens/contents/Dashboard';
 import Product from '../screens/contents/Product';
 import Report from '../screens/contents/Report';
 import Order from '../screens/contents/Order';
+import Cashier from '../screens/contents/Cashier';
 
 const role = {
     admin: '',
@@ -23,9 +24,9 @@ export const authorizedRoutes = [
     {
         path: '/cashiers',
         exact: true,
-        permissions: ['admin'],
+        permissions: ['admin', 'manager'],
         redirect: '/forbidden',
-        component: Dashboard,
+        component: Cashier,
     },
     {
         path: '/orders',
@@ -52,7 +53,7 @@ export const authorizedRoutes = [
 
 export const normalRoutes = [
     {
-        path: '/Login',
+        path: '/login',
         exact: true,
         component: Login,
     }, {

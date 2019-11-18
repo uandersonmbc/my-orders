@@ -5,8 +5,9 @@ import { Table, Button, Row, Icon } from 'antd';
 const dataSource = [
     {
         key: '1',
-        name: 'Mike',
-        age: 32,
+        name: 'Cachorro quente',
+        price: 32,
+        category: 'Pão',
         btn: [
             {
                 name: 'Deletar',
@@ -22,8 +23,9 @@ const dataSource = [
     },
     {
         key: '2',
-        name: 'John',
-        age: 42,
+        name: 'Cachorro quente',
+        price: 42,
+        category: 'Pão',
         btn: [
             {
                 name: 'Deletar',
@@ -46,9 +48,14 @@ const columns = [
         key: 'name'
     },
     {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age'
+        title: 'Preço',
+        dataIndex: 'price',
+        key: 'price'
+    },
+    {
+        title: 'Categoria',
+        dataIndex: 'category',
+        key: 'category'
     },
     {
         title: 'Ação',
@@ -62,10 +69,7 @@ const columns = [
     },
 ];
 
-console.log(process.env.TESTE);
-
-
-class Category extends React.Component {
+class Product extends React.Component {
     render() {
         return (
             <>
@@ -81,4 +85,4 @@ class Category extends React.Component {
     }
 }
 
-export default Category;
+export default Product;
