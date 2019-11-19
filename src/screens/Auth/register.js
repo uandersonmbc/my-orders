@@ -33,7 +33,7 @@ export default function Login({ props }) {
         } catch (error) {
             setSingin({
                 visible: true,
-                message: (error.response == undefined) ? '' : error.response.data.message
+                message: (error.response === undefined) ? '' : error.response.data.message
             });
         }
     }

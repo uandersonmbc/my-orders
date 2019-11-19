@@ -1,9 +1,21 @@
+import Api from './api';
+
 export const TOKEN_KEY = "@myOrder-Token";
 export const ROLE_KEY = "@myOrder-Role";
 export const USER_KEY = "@myOrder-User";
 
 export const isAuthenticated = () => {
     return ((localStorage.getItem(TOKEN_KEY) !== null) && (localStorage.getItem(ROLE_KEY) !== null));
+}
+
+export const checkRole = async () => {
+    try {
+        const user = await Api.get('/user');
+        console.log(user)
+        return (localStorage.getItem(ROLE_KEY) === user.data.role[0]);
+    } catch (error) {
+        return false;
+    }
 }
 
 export const getToken = () => localStorage.getItem(TOKEN_KEY);

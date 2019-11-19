@@ -6,52 +6,46 @@ import Report from '../screens/contents/Report';
 import Order from '../screens/contents/Order';
 import Cashier from '../screens/contents/Cashier';
 
-const role = {
-    admin: '',
-    manager: '',
-    waiter: '',
-    customer: ''
-}
-
-export const authorizedRoutes = [
+export const privateRoutes = [
+    // Administrador e Gerente
     {
         path: '/dashboard',
         exact: true,
-        permissions: ['admin', 'manager'],
+        permissions: ['administrator', 'manager'],
         redirect: '/forbidden',
         component: Dashboard,
     },
     {
         path: '/cashiers',
         exact: true,
-        permissions: ['admin', 'manager'],
+        permissions: ['administrator', 'manager'],
         redirect: '/forbidden',
         component: Cashier,
     },
     {
         path: '/orders',
         exact: true,
-        permissions: ['admin', 'manager'],
+        permissions: ['administrator', 'manager'],
         redirect: '/forbidden',
         component: Order,
     },
     {
         path: '/products',
         exact: true,
-        permissions: ['admin', 'manager'],
+        permissions: ['administrator', 'manager'],
         redirect: '/forbidden',
         component: Product,
     },
     {
         path: '/reports',
         exact: true,
-        permissions: ['admin', 'manager'],
+        permissions: ['administrator', 'manager'],
         redirect: '/forbidden',
         component: Report,
     },
 ];
 
-export const normalRoutes = [
+export const withoutAuthentication = [
     {
         path: '/login',
         exact: true,

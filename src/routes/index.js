@@ -5,7 +5,7 @@ import Main from './../screens/Main';
 import Blank from './../screens/Blank';
 import NotFound from './../screens/NotFound';
 
-import { authorizedRoutes, normalRoutes } from './routes';
+import { privateRoutes, withoutAuthentication } from './routes';
 import { getRole } from './../services/auth';
 
 const Routes = () => (
@@ -13,9 +13,9 @@ const Routes = () => (
         <Switch>
             <AclRouter
                 authorities={getRole()}
-                authorizedRoutes={authorizedRoutes}
+                authorizedRoutes={privateRoutes}
                 authorizedLayout={Main}
-                normalRoutes={normalRoutes}
+                normalRoutes={withoutAuthentication}
                 normalLayout={Blank}
                 notFound={NotFound}
             />

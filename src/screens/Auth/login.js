@@ -12,13 +12,13 @@ import { login, isAuthenticated, roleUser, userName } from './../../services/aut
 
 import './style.css';
 
-export default function Login({ props }) {
+export default function Login(props) {
 
     const [singin, setSingin] = useState({
         visible: false,
         message: ''
     });
-
+    console.log(props)
     const onSubmitLogin = async (e) => {
         e.preventDefault();
         const obj = {
@@ -30,13 +30,13 @@ export default function Login({ props }) {
             const response = await Api.post('/login', obj);
             login(response.data.token);
             const user = await Api.get('/user');
-            roleUser(user.data.role[0])
-            userName(user.data.user.name)
-            props.history.push('/app');
+            await roleUser(user.data.role[0])
+            await userName(user.data.user.name)
+            props.history.push('/dashboard');
         } catch (error) {
             setSingin({
                 visible: true,
-                message: (error.response == undefined) ? '' : error.response.data.message
+                message: (error.response === undefined) ? '' : error.response.data.message
             });
         }
     }
@@ -51,7 +51,7 @@ export default function Login({ props }) {
         />
     );
 
-    const Verify = () => (isAuthenticated() ? (<Redirect to='/dashboard' />) : '');
+    // const Verify = () => (isAuthenticated() ? (<Redirect to='/dashboard' />) : '');
 
     return (
         <Layout className='total'>
