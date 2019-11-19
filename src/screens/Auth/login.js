@@ -8,7 +8,7 @@ import Api from './../../services/api';
 
 import { Redirect } from 'react-router-dom';
 
-import { login, isAuthenticated, roleUser, userName } from './../../services/auth';
+import { login, isAuthenticated, roleUser, userName, getRole } from './../../services/auth';
 
 import './style.css';
 
@@ -30,9 +30,9 @@ export default function Login(props) {
             const response = await Api.post('/login', obj);
             login(response.data.token);
             const user = await Api.get('/user');
-            await roleUser(user.data.role[0])
-            await userName(user.data.user.name)
-            props.history.push('/dashboard');
+            roleUser(user.data.role[0])
+            userName(user.data.user.name)
+            props.history.push('/' + getRole() + '/dashboard');
         } catch (error) {
             setSingin({
                 visible: true,
@@ -51,11 +51,11 @@ export default function Login(props) {
         />
     );
 
-    // const Verify = () => (isAuthenticated() ? (<Redirect to='/dashboard' />) : '');
+    const Verify = () => (isAuthenticated() ? (<Redirect to={`/${getRole()}/dashboard`} />) : '');
 
     return (
         <Layout className='total'>
-            {/* <Verify /> */}
+            <Verify />
             <Card className='cardLogin'>
                 <form onSubmit={onSubmitLogin}>
                     <div className='divImg'>

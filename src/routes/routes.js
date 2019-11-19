@@ -1,6 +1,6 @@
 import { Login, Register } from './../screens/Auth';
+import { Adminmanager, Customer, Waiter } from './../screens/contents/Dashboard';
 import Forbidden from '../screens/Forbidden';
-import Dashboard from '../screens/contents/Dashboard';
 import Product from '../screens/contents/Product';
 import Report from '../screens/contents/Report';
 import Order from '../screens/contents/Order';
@@ -9,11 +9,25 @@ import Cashier from '../screens/contents/Cashier';
 export const privateRoutes = [
     // Administrador e Gerente
     {
-        path: '/dashboard',
+        path: '/customer/dashboard',
+        exact: true,
+        permissions: ['manager'],
+        redirect: '/forbidden',
+        component: Customer,
+    },
+    {
+        path: '/waiter/dashboard',
+        exact: true,
+        permissions: ['waiter'],
+        redirect: '/forbidden',
+        component: Waiter,
+    },
+    {
+        path: '/*/dashboard',
         exact: true,
         permissions: ['administrator', 'manager'],
         redirect: '/forbidden',
-        component: Dashboard,
+        component: Adminmanager,
     },
     {
         path: '/cashiers',

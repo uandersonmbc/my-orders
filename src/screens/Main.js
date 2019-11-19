@@ -16,7 +16,6 @@ function Main(props) {
   }
   const VerifyRole = async () => {
     const res = await checkRole();
-    console.log(res)
     if (!res) {
       logout()
       props.history.push('/login');

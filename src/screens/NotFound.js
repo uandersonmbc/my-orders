@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Redirect } from 'react-router-dom';
 
-import { isAuthenticated } from './../services/auth';
+import { isAuthenticated, getRole } from './../services/auth';
 
 function NotFound() {
     // const handleUsuarioViu = (index) => {
@@ -11,7 +11,7 @@ function NotFound() {
     //     dados[index].usuarioViu = true;
     //     this.setState({ dados: dados });
     // };
-    const Verify = () => (isAuthenticated() ? (<Redirect to='/dashboard' />) : (<Redirect to='/login' />));
+    const Verify = () => (isAuthenticated() ? (<Redirect to={`/${getRole()}/dashboard`} />) : (<Redirect to='/login' />));
     return (
         <main>
             <Verify />

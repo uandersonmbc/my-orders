@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Row, Col, Card } from 'antd';
 
-import AppCard from './../../components/AppCard';
+import AppCard from './../../../components/AppCard';
 
 
 import { Bar, Pie } from 'react-chartjs-2';
@@ -43,7 +43,7 @@ const data2 = {
     }]
 };
 
-export default function Dashboard() {
+function Adminmanager() {
     // https://www.chartjs.org/docs/latest/
 
     return (
@@ -102,3 +102,5 @@ export default function Dashboard() {
         </div>
     );
 }
+
+export default Adminmanager;

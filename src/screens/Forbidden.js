@@ -2,10 +2,10 @@ import React from 'react';
 
 import { Redirect } from 'react-router-dom';
 
-import { isAuthenticated } from './../services/auth';
+import { isAuthenticated, getRole } from './../services/auth';
 
 function Forbidden(props) {
-  const Verify = () => (isAuthenticated() ? (<Redirect to='/dashboard' />) : (<Redirect to='/login' />));
+  const Verify = () => (isAuthenticated() ? (<Redirect to={`/${getRole()}/dashboard`} />) : (<Redirect to='/login' />));
   return (
     <main>
       <Verify />
