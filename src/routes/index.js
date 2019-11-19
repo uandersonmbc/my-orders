@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Switch } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Switch } from 'react-router-dom';
 import AclRouter from 'react-acl-router';
 import Main from './../screens/Main';
 import Blank from './../screens/Blank';
@@ -10,7 +10,7 @@ import { getRole } from './../services/auth';
 
 const Routes = () => (
     <BrowserRouter>
-        <Switch>
+        <HashRouter basename='/'>
             <AclRouter
                 authorities={getRole()}
                 authorizedRoutes={privateRoutes}
@@ -19,7 +19,7 @@ const Routes = () => (
                 normalLayout={Blank}
                 notFound={NotFound}
             />
-        </Switch>
+        </HashRouter>
     </BrowserRouter>
 );
 
