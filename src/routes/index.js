@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, HashRouter, Switch } from 'react-router-dom';
+import { BrowserRouter, HashRouter } from 'react-router-dom';
 import AclRouter from 'react-acl-router';
 import Main from './../screens/Main';
 import Blank from './../screens/Blank';
