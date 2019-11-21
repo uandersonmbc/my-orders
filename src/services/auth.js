@@ -11,7 +11,6 @@ export const isAuthenticated = () => {
 export const checkRole = async () => {
     try {
         const user = await Api.get('/user');
-        console.log(user)
         return (localStorage.getItem(ROLE_KEY) === user.data.role[0]);
     } catch (error) {
         return false;
