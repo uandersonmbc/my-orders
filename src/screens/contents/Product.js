@@ -4,7 +4,7 @@ import Moment from 'react-moment';
 
 import Api from './../../services/api';
 
-import { message, Table, Modal, Button, Row, Icon, Form, Select, Popconfirm } from 'antd';
+import { Input, message, Table, Modal, Button, Row, Icon, Form, Select, Popconfirm } from 'antd';
 
 const { Option } = Select;
 
@@ -40,7 +40,7 @@ function Product(props) {
             dataIndex: 'key',
             render: key => (
                 <>
-                    <Button type='primary' style={{ marginRight: '5px' }} onClick={() => handleEdit(key)}>Editar</Button>
+                    <Button type='primary' style={{ marginRight: '5px' }} onClick={() => showModal('edit', key)}>Editar</Button>
                     <Popconfirm onConfirm={() => handleDelete(key)} okText='Sim' cancelText='Não' title="Quer mesmo deletar?">
                         <Button type='danger' >Deletar</Button>
                     </Popconfirm>
@@ -55,25 +55,68 @@ function Product(props) {
     });
 
     const [ingredients, setIngredients] = useState([]);
-    const [formSub, setFormSub] = useState()
+
+    const [categories, setCategories] = useState([]);
+
+    const [formSub, setFormSub] = useState({
+    })
 
     const [loadingData, setLoadingData] = useState(false);
 
-    const [modalProduct, setmodalProduct] = useState({
+    const [modalProductSub, setModalProductSub] = useState({
         visible: false,
         confirmLoading: false
     });
 
-    const showModal = () => {
-        setmodalProduct({
-            visible: true,
-        });
+    const [modalProductEdit, setModalProductEdit] = useState({
+        visible: false,
+        id: 0
+    });
+
+    const showModal = (modal, id = 0) => {
+        if (modal === 'edit') {
+            setModalProductEdit({
+                visible: true,
+                id
+            });
+        } else if (modal === 'sub') {
+            setModalProductSub({
+                visible: true,
+            });
+        }
+    };
+
+    const handleCancel = (modal) => {
+        if (modal === 'edit') {
+            setModalProductEdit({
+                visible: false,
+                id: 0
+            });
+        } else if (modal === 'sub') {
+            setModalProductSub({
+                visible: false,
+            });
+        }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(e.target.teste)
+        let data = {
+            name: e.target.name.value,
+            price: e.target.price.value,
+            category: e.target.category,
+            ingredient: e.target.ingredients
+        }
+        console.log(data)
     };
+
+    function handleChangeIng(value) {
+        console.log(`Ingrediente ${value}`);
+    }
+
+    function handleChangeCat(value) {
+        console.log(`Categoria ${value}`);
+    }
 
     const handleEdit = async (id) => {
         const product = await Api.get('/product/' + id);
@@ -99,16 +142,6 @@ function Product(props) {
     }
 
 
-    const handleCancel = e => {
-        setmodalProduct({
-            visible: false,
-        });
-    };
-
-    function handleChange(value) {
-        console.log(`selected ${value}`);
-    }
-
     const loadingProducts = async (page = 1) => {
         setLoadingData(true);
 
@@ -129,15 +162,35 @@ function Product(props) {
         setLoadingData(false);
     }
 
-    const loadingIngredients = async (page = 1) => {
+    const loadingIngredients = async () => {
         try {
             const response = await Api.get('/ingredient');
 
             let data = response.data.map(ingredient => {
-                return (<Option value={ingredient.name} key={ingredient.id}>{ingredient.name}</Option>)
+                return (<Option key={ingredient.name}>{ingredient.name}</Option>)
             });
 
-            setIngredients(data);
+            setIngredients({
+                ingredients: response.data,
+                options: data
+            });
+        } catch (error) {
+            alert('Não foi possível buscar os ingredientes')
+        }
+    }
+
+    const loadingCategories = async () => {
+        try {
+            const response = await Api.get('/category');
+
+            let data = response.data.map(category => {
+                return (<option value={category.id} selected>{category.name}</option>)
+            });
+
+            setCategories({
+                categories: response.data,
+                options: data
+            });
         } catch (error) {
             alert('Não foi possível buscar os ingredientes')
         }
@@ -147,41 +200,82 @@ function Product(props) {
     useEffect(() => {
         loadingProducts()
         loadingIngredients()
+        loadingCategories()
     }, []);
 
-    console.log(formSub)
+    console.log((categories.categories !== undefined) ? categories.categories[0] : '')
 
     return (
         <>
             <Row>
-                <Button style={{ marginRight: '5px' }} type="primary" onClick={showModal}>
+                <Button style={{ marginRight: '5px' }} type="primary" onClick={() => showModal('sub')}>
                     <Icon type="plus" />
                     Produto</Button>
             </Row>
             <br />
             <Modal
                 title="Basic Modal"
-                visible={modalProduct.visible}
-                onCancel={handleCancel}
-                confirmLoading={modalProduct.confirmLoading}
+                visible={modalProductSub.visible}
+                onCancel={() => handleCancel('sub')}
+                confirmLoading={modalProductSub.confirmLoading}
                 footer={[
-                    <Button onClick={handleCancel} type='danger' key="a">Cancelar <Icon type="close" /></Button>,
+                    <Button onClick={() => handleCancel('sub')} type='danger' key="a">Cancelar <Icon type="close" /></Button>,
                     <Button form="formProduct" htmlType="submit" type="primary">Cadastrar <Icon type="check" /></Button>,
                 ]}
             >
                 <Form id="formProduct" onSubmit={handleSubmit}>
+                    <div style={{ marginBottom: 16 }}>
+                        <Input required name='name' placeholder="Nome do produto" />
+                    </div>
+                    <div style={{ marginBottom: 16 }}>
+                        <Input
+                            required
+                            name='price'
+                            prefix={<Icon type="dollar" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                            type='number' step='0.1'
+                            placeholder="Valor"
+                        />
+                    </div>
+                    <div style={{ marginBottom: 16 }}>
+                        <select>
+                            {categories.options}
+                        </select>
+                    </div>
+                    <Select
+                        mode="multiple"
+                        style={{ width: '100%' }}
+                        placeholder="Por favor selecione um ingrediente"
+                        onChange={handleChangeIng}
+
+                    >
+                        {ingredients.options}
+                    </Select>
+                </Form>
+            </Modal>
+            <Modal
+                title="Basic Modal"
+                visible={modalProductEdit.visible}
+                onCancel={() => handleCancel('edit')}
+                confirmLoading={modalProductEdit.confirmLoading}
+                footer={[
+                    <Button onClick={() => handleCancel('edit')} type='danger' key="a">Cancelar <Icon type="close" /></Button>,
+                    <Button form="formProducta" htmlType="submit" type="primary">Cadastrar <Icon type="check" /></Button>,
+                ]}
+            >
+                <Form id="formProducta" onSubmit={handleEdit}>
                     <Select
                         name='teste'
                         mode="multiple"
                         style={{ width: '100%' }}
                         placeholder="Please select"
                         defaultValue={['china']}
-                        onChange={handleChange}
+                        onChange={handleChangeIng}
                     >
-                        {ingredients}
+                        {ingredients.options}
                     </Select>
                 </Form>
             </Modal>
+
             <Table
                 style={{ background: '#fff' }}
                 columns={columns}
