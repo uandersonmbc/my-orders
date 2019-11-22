@@ -1,5 +1,10 @@
 /* https://css-tricks.com/custom-scrollbars-in-webkit/ */
 
+tr:hover {
+    color: white;
+    background: #5e274f !important;
+}
+
 .scroll-none {
     height: 100%;
     overflow-y: scroll;
