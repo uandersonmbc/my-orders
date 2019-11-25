@@ -11,7 +11,7 @@ export const privateRoutes = [
     {
         path: '/customer/dashboard',
         exact: true,
-        permissions: ['manager'],
+        permissions: ['customer'],
         redirect: '/forbidden',
         component: Customer,
     },

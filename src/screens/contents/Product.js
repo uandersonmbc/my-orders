@@ -40,7 +40,7 @@ function Product(props) {
             dataIndex: 'key',
             render: key => (
                 <>
-                    <Button type='primary' style={{ marginRight: '5px' }} onClick={() => showModal('edit', key)}>Editar</Button>
+                    <Button type='primary' style={{ marginRight: '5px' }} onClick={() => handleEdit(key)}>Editar</Button>
                     <Popconfirm onConfirm={() => handleDelete(key)} okText='Sim' cancelText='Não' title="Quer mesmo deletar?">
                         <Button type='danger' >Deletar</Button>
                     </Popconfirm>
@@ -98,6 +98,7 @@ function Product(props) {
                 visible: false,
             });
         }
+        setSelectedIng([])
     };
 
     const handleSubmit = async (e) => {
@@ -108,7 +109,7 @@ function Product(props) {
             category_id: e.target.category.value,
             ingredients: selectedIng
         }
-        console.log(data)
+        // console.log(data)
         try {
             await Api.post('/product', data);
             e.target.reset();
@@ -126,18 +127,49 @@ function Product(props) {
             var { id } = ingredients.ingredients.filter(ing => ing.name === va)[0];
             return id;
         });
+        console.log(res)
         setSelectedIng(res);
+    }
+
+    const handleEditChange = (e) => {
+        setFormSub({
+            ...formSub,
+            [e.target.name]: e.target.value
+        })
     }
 
     const handleEdit = async (id) => {
         const product = await Api.get('/product/' + id);
+
+        const ingredients = product.data.ingredients
+        const res = ingredients.map(ing => {
+            return ing.name;
+        });
+        // console.log(res)
         setFormSub({
+            id,
             name: product.data.name,
             price: product.data.price,
             category_id: product.data.category_id,
-            ingredients: product.data.ingredients,
+            ingredients: res
         });
+        setSelectedIng(res);
+        showModal('edit')
     };
+
+    const handleEditSave = async (e) => {
+        e.preventDefault()
+        console.log(formSub)
+        // try {
+        //     const product = await Api.put('/product/' + id, formSub);
+        //     setModalProductSub({
+        //         visible: false,
+        //     });
+        // } catch (error) {
+        //     console.log(error.response)
+        // }
+    };
+
 
     const handleDelete = async (id) => {
         try {
@@ -214,8 +246,6 @@ function Product(props) {
         loadingCategories()
     }, []);
 
-    console.log((categories.categories !== undefined) ? categories.categories[0] : '')
-
     return (
         <>
             <Row>
@@ -270,17 +300,34 @@ function Product(props) {
                 confirmLoading={modalProductEdit.confirmLoading}
                 footer={[
                     <Button onClick={() => handleCancel('edit')} type='danger' key="a">Cancelar <Icon type="close" /></Button>,
-                    <Button form="formProducta" htmlType="submit" type="primary">Cadastrar <Icon type="check" /></Button>,
+                    <Button form="formProducta" htmlType="submit" type="primary">Salvar <Icon type="check" /></Button>,
                 ]}
             >
-                <Form id="formProducta" onSubmit={handleEdit}>
+                <Form id="formProducta" onSubmit={handleEditSave}>
+                    <div style={{ marginBottom: 16 }}>
+                        <Input onChange={handleEditChange} required name='name' placeholder="Nome do produto" />
+                    </div>
+                    <div style={{ marginBottom: 16 }}>
+                        <Input
+                            onChange={handleEditChange}
+                            required
+                            name='price'
+                            prefix={<Icon type="dollar" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                            type='number' step='0.1'
+                            placeholder="Valor"
+                        />
+                    </div>
+                    <div style={{ marginBottom: 16 }}>
+                        <select required name='category_id' onChange={handleEditChange}>
+                            {categories.options}
+                        </select>
+                    </div>
                     <Select
-                        name='teste'
                         mode="multiple"
                         style={{ width: '100%' }}
-                        placeholder="Please select"
-                        defaultValue={['china']}
+                        placeholder="Por favor selecione um ingrediente"
                         onChange={handleChangeIng}
+                        defaultValue={selectedIng}
                     >
                         {ingredients.options}
                     </Select>
