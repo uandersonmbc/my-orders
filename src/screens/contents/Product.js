@@ -55,6 +55,7 @@ function Product(props) {
     });
 
     const [ingredients, setIngredients] = useState([]);
+    const [selectedIng, setSelectedIng] = useState([]);
 
     const [categories, setCategories] = useState([]);
 
@@ -99,23 +100,33 @@ function Product(props) {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         let data = {
             name: e.target.name.value,
             price: e.target.price.value,
-            category: e.target.category,
-            ingredient: e.target.ingredients
+            category_id: e.target.category.value,
+            ingredients: selectedIng
         }
         console.log(data)
+        try {
+            await Api.post('/product', data);
+            e.target.reset();
+            setModalProductSub({
+                visible: false,
+            });
+        } catch (error) {
+            console.log(error.response)
+        }
+
     };
 
     function handleChangeIng(value) {
-        console.log(`Ingrediente ${value}`);
-    }
-
-    function handleChangeCat(value) {
-        console.log(`Categoria ${value}`);
+        const res = value.map(va => {
+            var { id } = ingredients.ingredients.filter(ing => ing.name === va)[0];
+            return id;
+        });
+        setSelectedIng(res);
     }
 
     const handleEdit = async (id) => {
@@ -237,7 +248,7 @@ function Product(props) {
                         />
                     </div>
                     <div style={{ marginBottom: 16 }}>
-                        <select>
+                        <select name='category'>
                             {categories.options}
                         </select>
                     </div>
