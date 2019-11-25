@@ -129,6 +129,10 @@ function Product(props) {
         });
         console.log(res)
         setSelectedIng(res);
+        setFormSub({
+            ...formSub,
+            ingredients: res
+        })
     }
 
     const handleEditChange = (e) => {
@@ -142,32 +146,35 @@ function Product(props) {
         const product = await Api.get('/product/' + id);
 
         const ingredients = product.data.ingredients
-        const res = ingredients.map(ing => {
+        const resid = ingredients.map(ing => {
+            return ing.id;
+        });
+        const resname = ingredients.map(ing => {
             return ing.name;
         });
-        // console.log(res)
+        console.log(resname)
         setFormSub({
             id,
             name: product.data.name,
             price: product.data.price,
             category_id: product.data.category_id,
-            ingredients: res
+            ingredients: resid
         });
-        setSelectedIng(res);
+        setSelectedIng(resname);
         showModal('edit')
     };
 
     const handleEditSave = async (e) => {
         e.preventDefault()
-        console.log(formSub)
-        // try {
-        //     const product = await Api.put('/product/' + id, formSub);
-        //     setModalProductSub({
-        //         visible: false,
-        //     });
-        // } catch (error) {
-        //     console.log(error.response)
-        // }
+        try {
+            const response = await Api.put('/product/' + formSub.id, formSub);
+            setModalProductEdit({
+                visible: false,
+            });
+            loadingProducts();
+        } catch (error) {
+            console.log('asfa', error)
+        }
     };
 
 
@@ -227,7 +234,7 @@ function Product(props) {
             const response = await Api.get('/category');
 
             let data = response.data.map(category => {
-                return (<option value={category.id} selected>{category.name}</option>)
+                return (<option value={category.id}>{category.name}</option>)
             });
 
             setCategories({
@@ -305,11 +312,12 @@ function Product(props) {
             >
                 <Form id="formProducta" onSubmit={handleEditSave}>
                     <div style={{ marginBottom: 16 }}>
-                        <Input onChange={handleEditChange} required name='name' placeholder="Nome do produto" />
+                        <Input onChange={handleEditChange} value={formSub.name} required name='name' placeholder="Nome do produto" />
                     </div>
                     <div style={{ marginBottom: 16 }}>
                         <Input
                             onChange={handleEditChange}
+                            value={formSub.price}
                             required
                             name='price'
                             prefix={<Icon type="dollar" style={{ color: 'rgba(0,0,0,.25)' }} />}
