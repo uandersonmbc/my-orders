@@ -8,43 +8,52 @@ import Api from './../../services/api';
 
 import { Redirect } from 'react-router-dom';
 
-import { login, isAuthenticated } from './../../services/auth';
+import { login, isAuthenticated, roleUser, userName, getRole } from './../../services/auth';
 
 import './style.css';
 
 export default function Login({ props }) {
 
-    const [singin, setSingin] = useState({
+    const [singup, setSingup] = useState({
         visible: false,
-        message: ''
+        message: '',
+        error: ''
     });
 
-    const onSubmitLogin = async (e) => {
+    const onSubmitRegister = async (e) => {
         e.preventDefault();
         const obj = {
             email: e.target.email.value,
-            password: e.target.password.value
+            password: e.target.password.value,
+            name: e.target.name.value,
+            username: e.target.username.value
         }
 
         try {
-            const response = await Api.post('/login', obj);
+            console.log(obj)
+            const response = await Api.post('/register', obj);
             login(response.data.token);
-            props.history.push('/app');
+            const user = await Api.get('/user');
+            roleUser(user.data.role[0])
+            userName(user.data.user.name)
+            props.history.push('/' + getRole() + '/dashboard');
         } catch (error) {
-            setSingin({
+            console.log(error.response)
+            setSingup({
                 visible: true,
-                message: (error.response === undefined) ? '' : error.response.data.message
+                message: (error.response === undefined) ? '' : error.response.data[0].message,
+                error: (error.response === undefined) ? '' : error.response.data[0].field
             });
         }
     }
 
     const Message = () => (
         <Alert
-            message={singin.message}
+            message={singup.message}
             closable
             type="error"
             showIcon
-            onClose={() => setSingin({ visible: false, message: '' })}
+            onClose={() => setSingup({ visible: false, message: '' })}
         />
     );
 
@@ -54,26 +63,27 @@ export default function Login({ props }) {
         <Layout className='total'>
             <Verify />
             <Card className='cardLogin'>
-                <form onSubmit={onSubmitLogin}>
+                <form onSubmit={onSubmitRegister}>
                     <div className='divImg'>
                         <img src={logo} className='img' alt="My Order" />
                     </div>
-                    {singin.visible ? (<Message />) : ''}
+                    {singup.visible ? (<Message />) : ''}
                     <br />
                     {/*  */}
                     <div className='divInputs'>
-                        <input required name='email' type='text' placeholder='E-mail/Usuário' className='input' />
-                        <input required name='password' type='password' placeholder='Senha' className='input' />
+                        <input required name='name' type='text' placeholder='Nome' className={`input ${(singup.error === 'name') ? 'inputError' : ''}`} />
+                        <input required name='email' type='text' placeholder='Email' className={`input ${(singup.error === 'email') ? 'inputError' : ''}`} />
+                        <input required name='username' type='text' placeholder='Usuário' className={`input ${(singup.error === 'username') ? 'inputError' : ''}`} />
+                        <input required name='password' type='password' placeholder='Senha' className={`input ${(singup.error === 'password') ? 'inputError' : ''}`} />
                     </div>
                     {/*  */}
                     <div className='divButtons'>
-                        <button type='submit' className='btn btn-primary'>Login</button>
+                        <button type='submit' className='btn btn-primary'>Cadastrar</button>
                         <button className='btn btn-google'>Google</button>
                     </div>
                     {/*  */}
                     <div className='divLinks'>
-                        <a href='/password/reset' className='links'>Esqueceu a senha ?</a>
-                        <a href='/register' className='links'>Não é cadastrado?</a>
+                        <a href='/login' className='links'>Já sou cadastrado</a>
                     </div>
                 </form>
             </Card>

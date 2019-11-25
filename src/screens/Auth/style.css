@@ -47,6 +47,10 @@
     color: #5E274F;
 }
 
+.inputError {
+    border: 2px solid rgb(255, 0, 55) !important;
+}
+
 .input:focus {
     border-color: rgb(57, 144, 226);
     outline: none;

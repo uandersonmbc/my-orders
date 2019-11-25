@@ -6,7 +6,7 @@ import logo from './../../assets/myorder.png';
 
 import Api from './../../services/api';
 
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 import { login, isAuthenticated, roleUser, userName, getRole } from './../../services/auth';
 
@@ -75,8 +75,8 @@ export default function Login(props) {
                     </div>
                     {/*  */}
                     <div className='divLinks'>
-                        <a href='/password/reset' className='links'>Esqueceu a senha ?</a>
-                        <a href='/register' className='links'>Não é cadastrado?</a>
+                        <Link to='#' className='links'>Esqueceu a senha ?</Link>
+                        <Link to='register' className='links'>Não é cadastrado?</Link>
                     </div>
                 </form>
             </Card>
