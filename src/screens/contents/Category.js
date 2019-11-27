@@ -48,6 +48,7 @@ function Category() {
     const [categories, setCategories] = useState([]);
 
     const [formSub, setFormSub] = useState({
+        name: ''
     })
 
     const [modalCategorySub, setModalCategorySub] = useState({
@@ -88,16 +89,14 @@ function Category() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        let data = {
-            name: e.target.name.value
-        }
 
         try {
-            await Api.post('/category', data);
+            await Api.post('/category', formSub);
             setModalCategorySub({
                 visible: false,
             });
             loadingCategories();
+            setFormSub({name: ''})
         } catch (error) {
             setModalCategorySub({
                 visible: false,
@@ -108,32 +107,19 @@ function Category() {
     };
 
     const handleEditChange = (e) => {
-        // setFormSub({
-        //     ...formSub,
-        //     [e.target.name]: e.target.value
-        // })
+        setFormSub({
+            ...formSub,
+            [e.target.name]: e.target.value
+        })
     }
 
     const handleEdit = async (id) => {
         const category = await Api.get('/category/' + id);
-
-        const ingredients = category.data.ingredients
-        const resid = ingredients.map(ing => {
-            return ing.id;
+        
+        setFormSub({
+            name: category.data.name,
         });
-        const resname = ingredients.map(ing => {
-            return ing.name;
-        });
-        console.log(resname)
-        alert(resname);
-        // setFormSub({
-        //     id,
-        //     name: category.data.name,
-        //     price: category.data.price,
-        //     category_id: category.data.category_id,
-        //     ingredients: resid
-        // });
-        // setSelectedIng(resname);
+        
         showModal('edit')
     };
 
@@ -192,13 +178,11 @@ function Category() {
     return (
         <>
             <Row>
-                <Button style={{ marginRight: '5px' }} type="primary" onClick={() => showModal('sub')}>
-                    <Icon type="plus" />
-                    Produto</Button>
+                <Button style={{ marginRight: '5px' }} type="primary" onClick={() => showModal('sub')}><Icon type="plus" /> Categoria</Button>
             </Row>
             <br />
             <Modal
-                title="Basic Modal"
+                title="Cadastro de categoria"
                 visible={modalCategorySub.visible}
                 onCancel={() => handleCancel('sub')}
                 confirmLoading={modalCategorySub.confirmLoading}
@@ -209,12 +193,12 @@ function Category() {
             >
                 <Form id="formCategoryCreate" onSubmit={handleSubmit}>
                     <div style={{ marginBottom: 16 }}>
-                        <Input required name='name' placeholder="Nome da categoria" />
+                        <Input  onChange={handleEditChange} value={formSub.name} required name='name' placeholder="Nome da categoria" />
                     </div>
                 </Form>
             </Modal>
             <Modal
-                title="Basic Modal"
+                title={`Editar ${formSub.name}`}
                 visible={modalCategoryEdit.visible}
                 onCancel={() => handleCancel('edit')}
                 confirmLoading={modalCategoryEdit.confirmLoading}
@@ -226,17 +210,6 @@ function Category() {
                 <Form id="formCatefory" onSubmit={handleEditSave}>
                     <div style={{ marginBottom: 16 }}>
                         <Input onChange={handleEditChange} value={formSub.name} required name='name' placeholder="Nome do produto" />
-                    </div>
-                    <div style={{ marginBottom: 16 }}>
-                        <Input
-                            onChange={handleEditChange}
-                            value={formSub.price}
-                            required
-                            name='price'
-                            prefix={<Icon type="dollar" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                            type='number' step='0.1'
-                            placeholder="Valor"
-                        />
                     </div>
                 </Form>
             </Modal>
