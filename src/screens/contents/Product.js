@@ -152,7 +152,7 @@ function Product(props) {
         const resname = ingredients.map(ing => {
             return ing.name;
         });
-        console.log(resname)
+
         alert(resname);
         setFormSub({
             id,
