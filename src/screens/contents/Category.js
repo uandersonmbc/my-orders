@@ -48,6 +48,7 @@ function Category() {
     const [categories, setCategories] = useState([]);
 
     const [formSub, setFormSub] = useState({
+        id: 0,
         name: ''
     })
 
@@ -96,7 +97,7 @@ function Category() {
                 visible: false,
             });
             loadingCategories();
-            setFormSub({name: ''})
+            setFormSub({ name: '' })
         } catch (error) {
             setModalCategorySub({
                 visible: false,
@@ -115,24 +116,25 @@ function Category() {
 
     const handleEdit = async (id) => {
         const category = await Api.get('/category/' + id);
-        
+
         setFormSub({
+            id: category.data.id,
             name: category.data.name,
         });
-        
+
         showModal('edit')
     };
 
     const handleEditSave = async (e) => {
         e.preventDefault()
         try {
-            // await Api.put('/category/' + formSub.id, formSub);
-            // setModalProductEdit({
-            //     visible: false,
-            // });
-            // loadingProducts();
+            await Api.put('/category/' + formSub.id, formSub);
+            setModalCategoryEdit({
+                visible: false,
+            });
+            loadingCategories();
         } catch (error) {
-            console.log('asfa', error)
+            console.log(error)
         }
     };
 
@@ -166,7 +168,7 @@ function Category() {
             });
         } catch (error) {
             console.log(error.response)
-            alert('Não foi possível buscar os produtos')
+            alert('Não foi possível buscar as categorias')
         }
         setLoadingData(false);
     }
@@ -193,7 +195,7 @@ function Category() {
             >
                 <Form id="formCategoryCreate" onSubmit={handleSubmit}>
                     <div style={{ marginBottom: 16 }}>
-                        <Input  onChange={handleEditChange} value={formSub.name} required name='name' placeholder="Nome da categoria" />
+                        <Input onChange={handleEditChange} value={formSub.name} required name='name' placeholder="Nome da categoria" />
                     </div>
                 </Form>
             </Modal>
@@ -209,7 +211,7 @@ function Category() {
             >
                 <Form id="formCatefory" onSubmit={handleEditSave}>
                     <div style={{ marginBottom: 16 }}>
-                        <Input onChange={handleEditChange} value={formSub.name} required name='name' placeholder="Nome do produto" />
+                        <Input onChange={handleEditChange} value={formSub.name} required name='name' placeholder="Nome da categoria" />
                     </div>
                 </Form>
             </Modal>
