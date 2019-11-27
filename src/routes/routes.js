@@ -5,6 +5,8 @@ import Product from '../screens/contents/Product';
 import Report from '../screens/contents/Report';
 import Order from '../screens/contents/Order';
 import Cashier from '../screens/contents/Cashier';
+import Category from '../screens/contents/Category';
+// import Cashier from '../screens/contents/';
 
 export const privateRoutes = [
     // Administrador e Gerente
@@ -35,6 +37,13 @@ export const privateRoutes = [
         permissions: ['administrator', 'manager'],
         redirect: '/forbidden',
         component: Cashier,
+    },
+    {
+        path: '/categories',
+        exact: true,
+        permissions: ['administrator', 'manager'],
+        redirect: '/forbidden',
+        component: Category,
     },
     {
         path: '/orders',

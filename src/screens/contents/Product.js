@@ -112,10 +112,10 @@ function Product(props) {
         // console.log(data)
         try {
             await Api.post('/product', data);
-            e.target.reset();
             setModalProductSub({
                 visible: false,
             });
+            loadingProducts();
         } catch (error) {
             console.log(error.response)
         }
@@ -153,6 +153,7 @@ function Product(props) {
             return ing.name;
         });
         console.log(resname)
+        alert(resname);
         setFormSub({
             id,
             name: product.data.name,
@@ -167,7 +168,7 @@ function Product(props) {
     const handleEditSave = async (e) => {
         e.preventDefault()
         try {
-            const response = await Api.put('/product/' + formSub.id, formSub);
+            await Api.put('/product/' + formSub.id, formSub);
             setModalProductEdit({
                 visible: false,
             });
@@ -252,6 +253,8 @@ function Product(props) {
         loadingIngredients()
         loadingCategories()
     }, []);
+
+    console.log(selectedIng)
 
     return (
         <>
