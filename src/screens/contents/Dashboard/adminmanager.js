@@ -1,104 +1,151 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { Row, Col, Card } from 'antd';
+import Moment from 'react-moment';
+
+import Api from './../../../services/api';
+
+import { Row, Col, Table, Popconfirm, Button } from 'antd';
 
 import AppCard from './../../../components/AppCard';
-
-
-import { Bar, Pie } from 'react-chartjs-2';
-
-const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [
-        {
-            label: 'My First dataset',
-            backgroundColor: 'rgba(255,99,132,0.2)',
-            borderColor: 'rgba(255,99,132,1)',
-            borderWidth: 1,
-            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-            hoverBorderColor: 'rgba(255,99,132,1)',
-            data: [65, 59, 80, 81, 56, 55, 40]
-        }
-    ]
-};
-
-const data2 = {
-    labels: [
-        'Red',
-        'Blue',
-        'Yellow'
-    ],
-    datasets: [{
-        data: [300, 50, 100],
-        backgroundColor: [
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56'
-        ],
-        hoverBackgroundColor: [
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56'
-        ]
-    }]
-};
+import { resolve } from 'dns';
 
 function Adminmanager() {
-    // https://www.chartjs.org/docs/latest/
+
+    const columns = [
+        {
+            title: 'ID',
+            dataIndex: 'id',
+            key: 'id',
+        },
+        {
+            title: 'Usuário',
+            dataIndex: 'user_id',
+            key: 'user_id',
+            render: user_id => {
+                const user = users.filter(user => user.id === user_id)[0]
+                return user.name
+            }
+        },
+        {
+            title: 'Criado',
+            dataIndex: 'created_at',
+            key: 'created_at',
+            render: created_at => (
+                <Moment format="DD/MM/YYYY hh:mm:ss">
+                    {created_at}
+                </Moment>
+            )
+        },
+        // {
+        //     title: 'Ações',
+        //     dataIndex: 'key',
+        //     render: key => (
+        //         <>
+        //             <Button type='primary' style={{ marginRight: '5px' }} onClick={() => alert(key)}>Editar</Button>
+        //             <Popconfirm onConfirm={() => alert(key)} okText='Sim' cancelText='Não' title="Quer mesmo deletar?">
+        //                 <Button type='danger' >Deletar</Button>
+        //             </Popconfirm>
+        //         </>
+        //     )
+        // },
+    ];
+
+    const [loadingData, setLoadingData] = useState(false);
+    const [infoCard, setInforCard] = useState({
+        orders: 0,
+        product: 0,
+        categories: 0,
+        ingredients: 0
+    });
+    const [users, setUsers] = useState([]);
+    const [orders, serOrders] = useState({
+        data: [],
+        page: 1,
+        total: 0
+    });
+
+    const loadingOrders = async (page = 1) => {
+        setLoadingData(true);
+        try {
+            const response = await Api.get('/order?page=' + page);
+            setInforCard({
+                ...infoCard,
+                orders: response.data.data.length
+            });
+            serOrders(response.data);
+        } catch (error) {
+            console.log(error.response)
+            alert('Não foi possível buscar as categorias')
+        }
+        setLoadingData(false);
+    }
+
+    const loadingUsers = async (page = 1) => {
+        try {
+            const response = await Api.get('/users');
+            setUsers(response.data);
+        } catch (error) {
+            console.log(error.response)
+            alert('Não foi possível buscar as categorias')
+        }
+    }
+
+    useEffect(() => {
+        loadingUsers()
+        loadingOrders()
+    }, []);
 
     return (
         <div>
             <Row gutter={[24, 24]} style={{ textAlign: 'center' }}>
                 <Col xs={24} lg={6}>
                     <AppCard
-                        icon={'shopping-cart'}
                         title={'Pedidos'}
-                        value={5}
+                        value={infoCard.orders}
                         styleCard={1}
                     />
                 </Col>
                 <Col xs={24} lg={6}>
                     <AppCard
-                        icon={'check'}
-                        title={'Concluídos'}
-                        value={47}
+                        title={'Produtos'}
+                        value={infoCard.product}
                         styleCard={2}
                     />
                 </Col>
                 <Col xs={24} lg={6}>
                     <AppCard
-                        icon={'close'}
-                        title={'Cancelados'}
-                        value={3}
+                        title={'Categorias'}
+                        value={infoCard.categories}
                         styleCard={3}
                     />
                 </Col>
                 <Col xs={24} lg={6}>
                     <AppCard
-                        icon={'dollar'}
-                        title={'Valor apurado'}
-                        value={'123,00'}
+                        title={'Ingredientes'}
+                        value={infoCard.ingredients}
                         styleCard={4}
                     />
                 </Col>
             </Row>
 
-            <Row gutter={[24, 24]}>
-                <Col xs={24} lg={16}>
-                    <Card>
-                        <Bar
-                            data={data}
-                            width={100}
-                            height={50}
-                        />
-                    </Card>
-                </Col>
-                <Col xs={24} lg={8}>
-                    <Card>
-                        <Pie data={data2} width={100} height={50} />
-                    </Card>
-                </Col>
-            </Row>
+            <br />
+
+            <h3>Pedidos</h3>
+            <Table
+                style={{ background: '#fff' }}
+                columns={columns}
+                bordered
+                pagination={
+                    {
+                        onChange: loadingOrders,
+                        defaultPageSize: 20,
+                        defaultCurrent: orders.page,
+                        total: (orders.total * 1)
+                    }
+                }
+                loading={loadingData}
+                dataSource={orders.data}
+            />
         </div>
     );
 }

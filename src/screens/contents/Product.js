@@ -153,7 +153,6 @@ function Product(props) {
             return ing.name;
         });
 
-        alert(resname);
         setFormSub({
             id,
             name: product.data.name,
@@ -362,7 +361,6 @@ function Product(props) {
             />
         </>
     );
-
 }
 
 export default Product;

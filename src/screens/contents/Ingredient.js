@@ -4,7 +4,7 @@ import Moment from 'react-moment';
 
 import Api from './../../services/api';
 
-import { Input, message, Table, Modal, Button, Row, Icon, Form, Select, Popconfirm } from 'antd';
+import { Input, message, Table, Modal, Button, Row, Icon, Form, Popconfirm } from 'antd';
 
 
 function Ingredient() {
