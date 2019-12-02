@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://uandersonmbc.github.io/my-orders",
   "dependencies": {
+    "@adonisjs/websocket-client": "^1.0.9",
     "antd": "^3.24.3",
     "axios": "^0.19.0",
     "babel-plugin-import": "^1.12.2",

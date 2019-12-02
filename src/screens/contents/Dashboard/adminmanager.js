@@ -4,12 +4,15 @@ import Moment from 'react-moment';
 
 import Api from './../../../services/api';
 
+import connection from './../../../services/socket';
+
 import { Row, Col, Table, Popconfirm, Button } from 'antd';
 
 import AppCard from './../../../components/AppCard';
-import { resolve } from 'dns';
+
 
 function Adminmanager() {
+    let subscription;
 
     const columns = [
         {
@@ -68,10 +71,6 @@ function Adminmanager() {
         setLoadingData(true);
         try {
             const response = await Api.get('/order?page=' + page);
-            setInforCard({
-                ...infoCard,
-                orders: response.data.data.length
-            });
             serOrders(response.data);
         } catch (error) {
             console.log(error.response)
@@ -90,7 +89,29 @@ function Adminmanager() {
         }
     }
 
+    const loadingInfo = async (page = 1) => {
+        try {
+            const response = await Api.get('/info');
+            setInforCard(response.data);
+        } catch (error) {
+            console.log(error.response)
+            alert('Não foi possível buscar as informações')
+        }
+    }
+
+    const registerSocket = () => {
+        connection.connect();
+        subscription = connection.subscribe(`order`, teste);
+    }
+
+    const teste = () => {
+        loadingInfo()
+        loadingOrders()
+    }
+
     useEffect(() => {
+        registerSocket()
+        loadingInfo()
         loadingUsers()
         loadingOrders()
     }, []);
