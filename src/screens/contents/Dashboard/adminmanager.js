@@ -6,15 +6,24 @@ import Api from './../../../services/api';
 
 import connection from './../../../services/socket';
 
-import { Row, Col, Table, Popconfirm, Button } from 'antd';
+import { Row, Col, Table, Modal, Button, Icon, Avatar } from 'antd';
 
 import AppCard from './../../../components/AppCard';
 
 
 function Adminmanager() {
-    let subscription;
 
     const columns = [
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            render: status => {
+                let cor = (status === 0) ? '#87d068' : '#f56a00'
+                let icon = (status === 0) ? 'check' : 'close'
+                return (<Avatar style={{ backgroundColor: cor }} icon={icon} />)
+            }
+        },
         {
             title: 'ID',
             dataIndex: 'id',
@@ -39,20 +48,21 @@ function Adminmanager() {
                 </Moment>
             )
         },
-        // {
-        //     title: 'Ações',
-        //     dataIndex: 'key',
-        //     render: key => (
-        //         <>
-        //             <Button type='primary' style={{ marginRight: '5px' }} onClick={() => alert(key)}>Editar</Button>
-        //             <Popconfirm onConfirm={() => alert(key)} okText='Sim' cancelText='Não' title="Quer mesmo deletar?">
-        //                 <Button type='danger' >Deletar</Button>
-        //             </Popconfirm>
-        //         </>
-        //     )
-        // },
+        {
+            title: 'Ações',
+            dataIndex: 'id',
+            render: id => (
+                <>
+                    <Button type='primary' style={{ marginRight: '5px' }} onClick={() => handleItems(id)}>Ver Itens</Button>
+                </>
+            )
+        },
     ];
 
+    const [modalItems, setModalItems] = useState({
+        visible: false,
+        confirmLoading: false
+    });
     const [loadingData, setLoadingData] = useState(false);
     const [infoCard, setInforCard] = useState({
         orders: 0,
@@ -61,20 +71,22 @@ function Adminmanager() {
         ingredients: 0
     });
     const [users, setUsers] = useState([]);
+    const [items, setItems] = useState([]);
     const [orders, serOrders] = useState({
         data: [],
         page: 1,
         total: 0
     });
 
+    const [total, setTotal] = useState(0);
+
     const loadingOrders = async (page = 1) => {
         setLoadingData(true);
         try {
-            const response = await Api.get('/order?page=' + page);
+            const response = await Api.get('/orders?page=' + page);
             serOrders(response.data);
         } catch (error) {
             console.log(error.response)
-            alert('Não foi possível buscar as categorias')
         }
         setLoadingData(false);
     }
@@ -85,7 +97,6 @@ function Adminmanager() {
             setUsers(response.data);
         } catch (error) {
             console.log(error.response)
-            alert('Não foi possível buscar as categorias')
         }
     }
 
@@ -95,16 +106,46 @@ function Adminmanager() {
             setInforCard(response.data);
         } catch (error) {
             console.log(error.response)
-            alert('Não foi possível buscar as informações')
         }
     }
 
     const registerSocket = () => {
         connection.connect();
-        subscription = connection.subscribe(`order`, teste);
+        connection.subscribe(`order`, realTime);
     }
 
-    const teste = () => {
+    const showModal = (modal, id = 0) => {
+        setModalItems({
+            visible: true,
+            id
+        });
+
+    };
+
+    const handleItems = async (id) => {
+
+        setTotal(0)
+
+        try {
+            const items = await Api.get('/order/' + id);
+            setItems(items.data);
+            let soma = items.data.map(item => parseFloat(item.price))
+            let total = soma.reduce((total, valor) => total + valor, 0);
+            setTotal(total)
+            showModal('edit')
+        } catch (error) {
+            console.log(error)
+        }
+    };
+
+    const handleCancel = (modal) => {
+        setModalItems({
+            visible: false,
+            id: 0
+        });
+
+    };
+    const realTime = () => {
         loadingInfo()
         loadingOrders()
     }
@@ -167,7 +208,42 @@ function Adminmanager() {
                 loading={loadingData}
                 dataSource={orders.data}
             />
-        </div>
+            <Modal
+                title="Cadastro de categoria"
+                visible={modalItems.visible}
+                onCancel={() => handleCancel('sub')}
+                confirmLoading={modalItems.confirmLoading}
+                footer={[
+                    <Button onClick={() => handleCancel('sub')} type='danger' key="a">Fechar <Icon type="close" /></Button>,
+                ]}
+            >
+                <table style={{ width: '100%' }}>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Preço</th>
+                        <th>Data</th>
+                    </tr>
+                    {items.map(item => {
+                        return (
+                            <tr>
+                                <td>{item.name}</td>
+                                <td>R$ {item.price}</td>
+                                <td>
+                                    <Moment format="DD/MM/YYYY hh:mm:ss">
+                                        {item.created_at}
+                                    </Moment>
+                                </td>
+                            </tr>
+                        )
+                    })}
+                    <tr>
+                        <td>Total</td>
+                        <td>R$ {total}</td>
+                        <td></td>
+                    </tr>
+                </table>
+            </Modal>
+        </div >
     );
 }
 
