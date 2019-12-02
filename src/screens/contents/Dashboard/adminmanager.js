@@ -72,7 +72,7 @@ function Adminmanager() {
     });
     const [users, setUsers] = useState([]);
     const [items, setItems] = useState([]);
-    const [orders, serOrders] = useState({
+    const [orders, setOrders] = useState({
         data: [],
         page: 1,
         total: 0
@@ -84,7 +84,7 @@ function Adminmanager() {
         setLoadingData(true);
         try {
             const response = await Api.get('/orders?page=' + page);
-            serOrders(response.data);
+            setOrders(response.data);
         } catch (error) {
             console.log(error.response)
         }
