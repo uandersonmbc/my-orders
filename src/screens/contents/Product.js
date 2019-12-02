@@ -264,7 +264,7 @@ function Product(props) {
             </Row>
             <br />
             <Modal
-                title="Basic Modal"
+                title="Cadastrar produto"
                 visible={modalProductSub.visible}
                 onCancel={() => handleCancel('sub')}
                 confirmLoading={modalProductSub.confirmLoading}
@@ -303,7 +303,7 @@ function Product(props) {
                 </Form>
             </Modal>
             <Modal
-                title="Basic Modal"
+                title="Editar Produto"
                 visible={modalProductEdit.visible}
                 onCancel={() => handleCancel('edit')}
                 confirmLoading={modalProductEdit.confirmLoading}

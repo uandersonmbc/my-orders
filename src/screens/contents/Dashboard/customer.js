@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Icon, Row, Col, PageHeader, Button, Descriptions, Popconfirm } from 'antd';
 
 import Api from './../../../services/api';
+import { logout } from './../../../services/auth';
 
 import './styles.css';
 
@@ -34,7 +35,6 @@ function Customer(props) {
 
         try {
             const response = Api.post('/addItem', { items: selecteds });
-            alert('Item add');
             loadingMyorder()
         } catch (error) {
             console.log(error)
@@ -50,7 +50,6 @@ function Customer(props) {
         })
         try {
             const response = Api.post('/deleteItem', { items: [id] });
-            alert('Item deletado');
             loadingMyorder()
 
         } catch (error) {
@@ -115,6 +114,11 @@ function Customer(props) {
         }
     }
 
+    const deslogar = () => {
+        logout();
+        props.history.push('/login');
+    }
+
     useEffect(() => {
         loadingMyorder()
         loadingProducts()
@@ -129,9 +133,10 @@ function Customer(props) {
                 subTitle=""
                 extra={[
                     <Popconfirm onConfirm={() => cancelOrder()} okText='Sim' cancelText='Não' title="Quer mesmo cancelar?">
-                        <Button key="2" type="danger">Cancelar</Button>
+                        <Button key="1" type="danger">Cancelar</Button>
                     </Popconfirm>,
-                    <Button key="1" type="primary" onClick={openOrder}>Fazer Pedido</Button>,
+                    <Button key="2" type="primary" onClick={openOrder}>Fazer Pedido</Button>,
+                    <Button key="3" type="ghost" onClick={deslogar}>Sair</Button>,
                 ]}
             >
                 <Descriptions size="small" column={3}>

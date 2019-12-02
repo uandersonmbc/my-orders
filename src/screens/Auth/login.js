@@ -32,7 +32,7 @@ export default function Login(props) {
             const user = await Api.get('/user');
             roleUser(user.data.role[0])
             userName(user.data.user.name)
-            props.history.push('/' + getRole() + '/dashboard');
+            props.history.push('/' + user.data.role[0] + '/dashboard');
         } catch (error) {
             setSingin({
                 visible: true,
