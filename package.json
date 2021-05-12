@@ -8,7 +8,7 @@
     "antd": "^3.24.3",
     "axios": "^0.19.0",
     "babel-plugin-import": "^1.12.2",
-    "chart.js": "^2.9.1",
+    "chart.js": "^2.9.4",
     "customize-cra": "^0.8.0",
     "gh-pages": "^2.1.1",
     "less": "^3.10.3",
